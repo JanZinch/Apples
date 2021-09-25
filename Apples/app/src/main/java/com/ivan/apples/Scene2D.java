@@ -18,18 +18,19 @@ import java.util.List;
 public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
 
     Paint _paint = new Paint(Color.BLACK);
-    //Paint rect = new Paint(Color.GREEN);
+
     float x = 0, y = 0;
+
+    public List<Apple> apples = null;
 
 
     private Resources _res = null;
     private Bitmap _redApple = null;
-
     private Bitmap _redAppleSource = null;
+    private Matrix _matrix = null;
 
-    private Matrix _m = null;
 
-    private List<Vector2> _points = null;
+    private final float _appleRadius = 150.0f;
 
 
 
@@ -39,8 +40,8 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
         _paint.setStrokeWidth(40f);
         _paint.setColor(Color.RED);
 
-        _m = new Matrix();
-        _m.setScale(0.25f, 0.25f);
+        _matrix = new Matrix();
+        _matrix.setScale(0.1f, 0.1f);
 
         //if(_res != null) Debug.Log("RES");
         //if
@@ -69,27 +70,14 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
 
         try{
 
-            //canvas.drawRect(0, 0, 1500, 1500, rect);
+            if(_res == null) return;
 
-            if(_res == null || _points == null) return;
+            for(Apple apple : apples){
 
-            for(Vector2 point : _points){
+                Debug.Log("DRAW!");
 
-                //canvas.drawColor(Color.YELLOW);
-                //canvas.drawPoint(point.getX(), point.getY(), _paint);
-
-                //Matrix matrix = new Matrix();
-                //matrix.setScale(0.95f, 0.95f);
-
-                _redApple = Bitmap.createBitmap(_redAppleSource, 0, 0,
-                        _redAppleSource.getWidth(), _redAppleSource.getHeight(), _m, true);
-
-                //canvas.drawBitmap(_redApple, _m, _paint);
-
-                canvas.drawBitmap(_redApple, point.getX() - _redApple.getWidth()/2, point.getY() -_redApple.getHeight()/2, _paint);
-
-                //canvas.drawBitmap(_redApple, (int)point.getX(), point.getY(), new Matrix().setScale(0.5f, 0.5f), _paint);
-
+                _redApple = Bitmap.createBitmap(_redAppleSource, 0, 0, _redAppleSource.getWidth(), _redAppleSource.getHeight(), _matrix, true);
+                canvas.drawBitmap(_redApple, apple.getPosition().getX() - _redApple.getWidth()/2, apple.getPosition().getY() -_redApple.getHeight()/2, _paint);
             }
 
         }
@@ -102,12 +90,37 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
 
     }
 
+    public Apple onTouchApple(Vector2 point){
 
-    public void setPoints(List<Vector2> points){
+        for(Apple apple : apples){
 
-        _points = points;
+            if( point.getX() > apple.getPosition().getX() - _appleRadius && point.getX() < apple.getPosition().getX() + _appleRadius
+                    && point.getY() > apple.getPosition().getY() - _appleRadius && point.getY() < apple.getPosition().getY()){
+
+                Debug.Log("TARGET!");
+                return apple;
+            }
+        }
+
+        return null;
+    }
+
+    public void updatePosition(int id, Vector2 newPosition){
+
+        for(Apple apple : apples){
+
+            if(id == apple.id()){
+
+                Debug.Log("OLD: " + newPosition.getX() + "   NEW: " + apple.getPosition().getX());
+
+                apple.setPosition(newPosition);
+                Debug.Log("UPDATED!");
+            }
+        }
+
         invalidate();
     }
+
 
 
 }

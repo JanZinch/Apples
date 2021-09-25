@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private Scene2D _scene = null;
 
-    ImageView iv;
+    private Apple _selectedApple = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        _scene.apples = new ArrayList<Apple>();
+        _scene.apples.add(new Apple(0, new Vector2(45.0f, 190.0f), Apple.Color.RED));
+        _scene.apples.add(new Apple(1, new Vector2(300.0f, 300.0f), Apple.Color.GREEN));
+        _scene.apples.add(new Apple(2, new Vector2(145.0f, 190.0f), Apple.Color.GREEN));
+
+    }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -43,25 +53,38 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         float x = event.getX();
         float y = event.getY();
 
+        Vector2 fingerPosition = new Vector2( event.getX(),  event.getY());
+
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // нажатие
                 sDown = "Down: " + x + "," + y;
                 sMove = ""; sUp = "";
+
+                _selectedApple = _scene.onTouchApple(fingerPosition);
+
+
                 break;
             case MotionEvent.ACTION_MOVE: // движение
                 sMove = "Move: " + x + "," + y;
+
+                if(_selectedApple != null){
+
+                    _scene.updatePosition(_selectedApple.id(), fingerPosition);
+                }
+
                 break;
             case MotionEvent.ACTION_UP: // отпускание
             case MotionEvent.ACTION_CANCEL:
                 sMove = "";
                 sUp = "Up: " + x + "," + y;
+
+                _selectedApple = null;
+
                 break;
         }
 
-        List<Vector2> list = new ArrayList<Vector2>();
-        list.add(new Vector2(x,y));
 
-        _scene.setPoints(list);
 
         Debug.Log(sDown + "\n" + sMove + "\n" + sUp);
 
