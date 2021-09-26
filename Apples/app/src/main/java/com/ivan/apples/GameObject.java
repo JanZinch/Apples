@@ -1,13 +1,13 @@
 package com.ivan.apples;
 
-public class Apple {
+public class GameObject {
 
     private int _id;
     private Color _color;
     private Vector2 _position;
 
 
-    public Apple(int id, Vector2 position, Color color){
+    public GameObject(int id, Vector2 position, Color color){
 
         _id = id;
         _position = position;
@@ -15,14 +15,19 @@ public class Apple {
 
     }
 
-    public enum Color{
+    public enum Color {
 
-        RED, GREEN
+        RED_APPLE, GREEN_APPLE, BASKET
     }
 
     public void setPosition(Vector2 position){
 
         _position = position;
+    }
+
+    public Color getColor(){
+
+        return _color;
     }
 
     public Vector2 getPosition(){
