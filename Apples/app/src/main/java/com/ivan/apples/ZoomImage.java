@@ -23,7 +23,8 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
     private Bitmap _bmpSource = null;
     private Matrix _matrix = null;
 
-    float x = 0, y = 0;
+    private Vector2 _firstFingerPosition = null;
+    private Vector2 _secondFingerPosition = null;
 
     public void SetResources(Resources res){
 
@@ -47,15 +48,60 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
         super.onDraw(canvas);
 
 
-        Bitmap bmp = Bitmap.createBitmap(_bmpSource, 0, 0, _bmpSource.getWidth(), _bmpSource.getHeight(), _matrix, true);
 
-        canvas.drawBitmap(bmp, 0, 0, _paint);
+
+        try{
+
+            Bitmap bmp = Bitmap.createBitmap(_bmpSource, 0, 0, _bmpSource.getWidth(), _bmpSource.getHeight(), _matrix, true);
+
+            canvas.drawBitmap(bmp, 0, 0, _paint);
+
+        }
+        catch (Exception ex){
+
+            Debug.Log(ex.getMessage());
+        }
+
 
         //canvas.drawColor(Color.CYAN);
         //canvas.drawPoint(x, y, p);
 
 
         //canvas.drawRect(0, 0, 1500, 1500, rect);
+    }
+
+    public void SetFingers(Vector2 first, Vector2 second){
+
+        _firstFingerPosition = first;
+        _secondFingerPosition = second;
+
+    }
+
+    public void Zoom(Vector2 newFirst, Vector2 newSecond){
+
+        try{
+
+            float scalingFactor = (newSecond.subtract(newFirst)).magnitude() /
+                    (_secondFingerPosition.subtract(_firstFingerPosition)).magnitude();
+
+            Debug.Log("FACTOR: " + scalingFactor);
+
+
+
+            _matrix.setScale(scalingFactor, scalingFactor);
+
+            _firstFingerPosition = newFirst;
+            _secondFingerPosition = newSecond;
+
+            invalidate();
+
+        }
+        catch (Exception ex){
+
+            Debug.Log(ex.getMessage());
+        }
+
+
     }
 
 

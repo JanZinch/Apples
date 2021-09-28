@@ -15,13 +15,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private GameObject _selectedGameObject = null;
 
     private TextView _score = null;
-
     private int _counter = 0;
-
     private FloatingActionButton _restartBtn = null;
 
     private ZoomImage _resImage = null;
-
+    private boolean _resImageView = false;
+    private Vector2 prevFirstFingerPos = null;
+    private Vector2 prevSecondFingerPos = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 _selectedGameObject = null;
                 _scene.InitGameObjects();
                 _resImage.setVisibility(View.INVISIBLE);
+                _resImageView = false;
 
             }
         });
@@ -80,29 +81,81 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             Vector2 fingerPosition = new Vector2( event.getX(),  event.getY());
 
+            //prevFingerPos = null;
 
-            switch (event.getAction()) {
+            switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN: // нажатие
-                    sDown = "Down: " + x + "," + y;
-                    sMove = ""; sUp = "";
+                    //sDown = "Down: " + x + "," + y;
+                    //sMove = ""; sUp = "";
 
-                    _selectedGameObject = _scene.onTouchApple(fingerPosition);
+
+
+                    if(_resImageView){
+
+                        prevFirstFingerPos = fingerPosition;
+
+                        Debug.Log("ONE");
+                    }
+                    else {
+
+                        _selectedGameObject = _scene.onTouchApple(fingerPosition);
+                        Debug.Log("SET!");
+                    }
+
 
 
                     break;
-                case MotionEvent.ACTION_MOVE: // движение
-                    sMove = "Move: " + x + "," + y;
 
-                    if(_selectedGameObject != null){
+                case MotionEvent.ACTION_POINTER_DOWN:
+
+                    if(_resImageView){
+
+                        Debug.Log("TWO");
+                        if(prevFirstFingerPos == null) Debug.Log("D_PREV!");
+                        if(fingerPosition == null) Debug.Log("D_THIS!");
+
+                        _resImage.SetFingers(prevFirstFingerPos, fingerPosition);
+
+                        prevSecondFingerPos = fingerPosition;
+                    }
+
+                    break;
+
+                case MotionEvent.ACTION_MOVE: // движение
+                    //sMove = "Move: " + x + "," + y;
+
+                    if(_resImageView){
+
+                        if(event.getPointerId(event.getActionIndex()) == 0){
+
+
+                            _resImage.Zoom(fingerPosition, prevSecondFingerPos);
+                        }
+                        else {
+
+                            _resImage.Zoom(prevFirstFingerPos, fingerPosition);
+                        }
+
+
+                        if (prevFirstFingerPos == null) Debug.Log("M_PREV!");
+                        if (fingerPosition == null) Debug.Log("M_THIS!");
+                        //_resImage.Zoom(prevFirstFingerPos, fingerPosition);
+                    }
+                    else if(_selectedGameObject != null){
 
                         _scene.updatePosition(_selectedGameObject.id(), fingerPosition);
                     }
 
+
+
                     break;
+
+
+
                 case MotionEvent.ACTION_UP: // отпускание
                 case MotionEvent.ACTION_CANCEL:
-                    sMove = "";
-                    sUp = "Up: " + x + "," + y;
+                    //sMove = "";
+                    //sUp = "Up: " + x + "," + y;
 
                     if(_selectedGameObject != null){
 
@@ -110,24 +163,32 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                             _counter++;
                             _score.setText("Score: " + _counter);
+                            Debug.Log("REMOVE!");
+
                             if(_scene.getApplesCount() == 0){
 
                                 _resImage.setVisibility(View.VISIBLE);
+                                _resImageView = true;
                             }
 
                         }
                         _selectedGameObject = null;
                     }
 
-
-
                     break;
+
+                    case MotionEvent.ACTION_POINTER_UP:
+
+                        if(_resImageView){
+
+                            _resImage.SetFingers(null, null);
+                        }
+
+                        break;
+
             }
 
-
-
             Debug.Log(sDown + "\n" + sMove + "\n" + sUp);
-
         }
         catch (Exception ex){
 

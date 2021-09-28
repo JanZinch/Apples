@@ -20,6 +20,11 @@ public class Vector2 {
         return new Vector2(x * f, y * f);
     }
 
+    public Vector2 divide(Vector2 v) {
+
+        return new Vector2(x / v.x, y / v.y);
+    }
+
 
     Vector2 add(Vector2 v) {
         return new Vector2(x + v.x, y + v.y);
@@ -33,6 +38,10 @@ public class Vector2 {
         return new Vector2(x - v.x, y - v.y);
     }
 
+    float magnitude(){
+
+        return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
 
 
     float getX(){
