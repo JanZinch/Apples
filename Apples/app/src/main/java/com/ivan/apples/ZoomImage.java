@@ -17,11 +17,13 @@ import androidx.annotation.Nullable;
 public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
 
 
-    Paint _paint = new Paint(Color.BLACK);
+    private Paint _paint = new Paint(Color.BLACK);
 
     private Resources _res = null;
     private Bitmap _bmpSource = null;
     private Matrix _matrix = null;
+
+    private Vector2 _originalScale = new Vector2(0.7f, 0.7f);
 
     private Vector2 _firstFingerPosition = null;
     private Vector2 _secondFingerPosition = null;
@@ -38,9 +40,8 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
 
     public ZoomImage(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
         _paint.setStrokeWidth(20f);
-        //rect.setStrokeWidth(4);
-        //rect.setStyle(Paint.Style.STROKE);
     }
 
     @Override
@@ -62,12 +63,6 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
             Debug.Log(ex.getMessage());
         }
 
-
-        //canvas.drawColor(Color.CYAN);
-        //canvas.drawPoint(x, y, p);
-
-
-        //canvas.drawRect(0, 0, 1500, 1500, rect);
     }
 
     public void SetFingers(Vector2 first, Vector2 second){
@@ -75,6 +70,7 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
         _firstFingerPosition = first;
         _secondFingerPosition = second;
 
+        Debug.Log("SET!");
     }
 
     public void Zoom(Vector2 newFirst, Vector2 newSecond){
@@ -84,14 +80,19 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
             float scalingFactor = (newSecond.subtract(newFirst)).magnitude() /
                     (_secondFingerPosition.subtract(_firstFingerPosition)).magnitude();
 
+
+            Debug.Log("FIRST MAGN: " + (_secondFingerPosition.subtract(_firstFingerPosition)).magnitude());
+            Debug.Log("SECOND MAGN: " + (newSecond.subtract(newFirst)).magnitude());
             Debug.Log("FACTOR: " + scalingFactor);
 
 
 
             _matrix.setScale(scalingFactor, scalingFactor);
 
-            _firstFingerPosition = newFirst;
-            _secondFingerPosition = newSecond;
+
+
+            //_firstFingerPosition = newFirst;
+            //_secondFingerPosition = newSecond;
 
             invalidate();
 

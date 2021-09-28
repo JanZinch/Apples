@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/teal_700"
-        android:textSize="35sp"
+        android:textSize="60sp"
         android:layout_marginLeft="10dp"
         android:text = "Score: 0"
         >
@@ -29,8 +29,8 @@
     <com.ivan.apples.ZoomImage
 
         android:id = "@+id/res_img"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="500dp"
+        android:layout_height="500dp"
         android:layout_gravity="center"
         >
 
@@ -39,8 +39,8 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/restart_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="bottom|right"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
@@ -48,9 +48,7 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="10dp"
-        app:fabSize="normal"
         app:backgroundTint="@color/orange"
-
         app:srcCompat="@drawable/round_restore_48dp"
         android:text="LOL">
 

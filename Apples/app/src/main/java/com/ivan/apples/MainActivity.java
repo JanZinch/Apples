@@ -114,9 +114,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         if(prevFirstFingerPos == null) Debug.Log("D_PREV!");
                         if(fingerPosition == null) Debug.Log("D_THIS!");
 
-                        _resImage.SetFingers(prevFirstFingerPos, fingerPosition);
+                        Debug.Log("ACTION INDEX: " + event.getPointerCount());
 
-                        prevSecondFingerPos = fingerPosition;
+                        //_resImage.SetFingers(prevFirstFingerPos, fingerPosition);
+                        _resImage.SetFingers(new Vector2(event.getX(0), event.getY(0)),
+                                new Vector2(event.getX(1), event.getY(1)));
+
+
+                        //prevSecondFingerPos = fingerPosition;
                     }
 
                     break;
@@ -126,15 +131,36 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                     if(_resImageView){
 
-                        if(event.getPointerId(event.getActionIndex()) == 0){
-
+                        /*if(event.getPointerId(event.getActionIndex()) == 0){
 
                             _resImage.Zoom(fingerPosition, prevSecondFingerPos);
                         }
                         else {
 
-                            _resImage.Zoom(prevFirstFingerPos, fingerPosition);
+                            //_resImage.Zoom(prevFirstFingerPos, fingerPosition);
+                        }*/
+
+                        //Debug.Log("ACTION INDEX: " + event.getPointerCount());
+
+                        _resImage.Zoom(new Vector2(event.getX(0), event.getY(0)) ,
+                                new Vector2(event.getX(1), event.getY(1)));
+
+                        /*for(int i = 0; i<event.getPointerCount(); i++){
+
+
                         }
+
+
+                        if(event.getPointerId(0) == 0){
+
+                            prevSecondFingerPos = fingerPosition;
+
+                        }
+                        else{
+
+                            Debug.Log("ACTION");
+                            _resImage.Zoom(prevSecondFingerPos , fingerPosition);
+                        }*/
 
 
                         if (prevFirstFingerPos == null) Debug.Log("M_PREV!");
@@ -150,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                     break;
 
+                    //case MotionEvent.ACTION_POINTER_MOVE
 
 
                 case MotionEvent.ACTION_UP: // отпускание
