@@ -67,42 +67,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        //TextView tv;
-        //float x;
-        //float y;
-        String sDown = "";
-        String sMove = "";
-        String sUp = "";
-
         try{
-
-            float x = event.getX();
-            float y = event.getY();
 
             Vector2 fingerPosition = new Vector2( event.getX(),  event.getY());
 
-            //prevFingerPos = null;
-
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN: // нажатие
-                    //sDown = "Down: " + x + "," + y;
-                    //sMove = ""; sUp = "";
-
-
 
                     if(_resImageView){
 
                         prevFirstFingerPos = fingerPosition;
-
-                        Debug.Log("ONE");
                     }
                     else {
 
                         _selectedGameObject = _scene.onTouchApple(fingerPosition);
-                        Debug.Log("SET!");
+                        //Debug.Log("SET!");
                     }
-
-
 
                     break;
 
@@ -110,79 +90,33 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                     if(_resImageView){
 
-                        Debug.Log("TWO");
-                        if(prevFirstFingerPos == null) Debug.Log("D_PREV!");
-                        if(fingerPosition == null) Debug.Log("D_THIS!");
+                        //Debug.Log("ACTION INDEX: " + event.getPointerCount());
 
-                        Debug.Log("ACTION INDEX: " + event.getPointerCount());
-
-                        //_resImage.SetFingers(prevFirstFingerPos, fingerPosition);
                         _resImage.SetFingers(new Vector2(event.getX(0), event.getY(0)),
                                 new Vector2(event.getX(1), event.getY(1)));
 
-
-                        //prevSecondFingerPos = fingerPosition;
                     }
 
                     break;
 
                 case MotionEvent.ACTION_MOVE: // движение
-                    //sMove = "Move: " + x + "," + y;
 
                     if(_resImageView){
-
-                        /*if(event.getPointerId(event.getActionIndex()) == 0){
-
-                            _resImage.Zoom(fingerPosition, prevSecondFingerPos);
-                        }
-                        else {
-
-                            //_resImage.Zoom(prevFirstFingerPos, fingerPosition);
-                        }*/
-
-                        //Debug.Log("ACTION INDEX: " + event.getPointerCount());
 
                         _resImage.Zoom(new Vector2(event.getX(0), event.getY(0)) ,
                                 new Vector2(event.getX(1), event.getY(1)));
 
-                        /*for(int i = 0; i<event.getPointerCount(); i++){
-
-
-                        }
-
-
-                        if(event.getPointerId(0) == 0){
-
-                            prevSecondFingerPos = fingerPosition;
-
-                        }
-                        else{
-
-                            Debug.Log("ACTION");
-                            _resImage.Zoom(prevSecondFingerPos , fingerPosition);
-                        }*/
-
-
-                        if (prevFirstFingerPos == null) Debug.Log("M_PREV!");
-                        if (fingerPosition == null) Debug.Log("M_THIS!");
-                        //_resImage.Zoom(prevFirstFingerPos, fingerPosition);
                     }
                     else if(_selectedGameObject != null){
 
                         _scene.updatePosition(_selectedGameObject.id(), fingerPosition);
                     }
 
-
-
                     break;
-
-                    //case MotionEvent.ACTION_POINTER_MOVE
 
 
                 case MotionEvent.ACTION_UP: // отпускание
                 case MotionEvent.ACTION_CANCEL:
-                    //sMove = "";
-                    //sUp = "Up: " + x + "," + y;
 
                     if(_selectedGameObject != null){
 
@@ -190,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
                             _counter++;
                             _score.setText("Score: " + _counter);
-                            Debug.Log("REMOVE!");
 
                             if(_scene.getApplesCount() == 0){
 
@@ -215,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
             }
 
-            Debug.Log(sDown + "\n" + sMove + "\n" + sUp);
         }
         catch (Exception ex){
 

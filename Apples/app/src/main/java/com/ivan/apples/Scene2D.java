@@ -73,11 +73,11 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
             gameObjects.add(new GameObject(0, new Vector2(0, 0), GameObject.Color.BASKET));
         }
 
-        gameObjects.add(new GameObject(1, new Vector2(45.0f, 190.0f), GameObject.Color.RED_APPLE));
-        gameObjects.add(new GameObject(2, new Vector2(300.0f, 300.0f), GameObject.Color.GREEN_APPLE));
-        //gameObjects.add(new GameObject(3, new Vector2(145.0f, 190.0f), GameObject.Color.GREEN_APPLE));
-        //gameObjects.add(new GameObject(4, new Vector2(300.0f, 300.0f), GameObject.Color.RED_APPLE));
-        //gameObjects.add(new GameObject(5, new Vector2(350.0f, 300.0f), GameObject.Color.RED_APPLE));
+        gameObjects.add(new GameObject(1, new Vector2(300.0f, 500.0f), GameObject.Color.RED_APPLE));
+        gameObjects.add(new GameObject(2, new Vector2(700.0f, 300.0f), GameObject.Color.GREEN_APPLE));
+        gameObjects.add(new GameObject(3, new Vector2(300.0f, 1200.0f), GameObject.Color.GREEN_APPLE));
+        gameObjects.add(new GameObject(4, new Vector2(700.0f, 1600.0f), GameObject.Color.RED_APPLE));
+        gameObjects.add(new GameObject(5, new Vector2(500.0f, 300.0f), GameObject.Color.RED_APPLE));
 
         invalidate();
     }
@@ -147,7 +147,7 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
 
             if( gameObject.getColor() != GameObject.Color.BASKET && checkRadiusConstraint(point, gameObject.getPosition(), _appleRadius)){
 
-                Debug.Log("TARGET!");
+                //Debug.Log("TARGET!");
                 invalidate();
                 return gameObject;
             }
@@ -175,8 +175,6 @@ public class Scene2D extends androidx.appcompat.widget.AppCompatImageView {
             if (p != -1){
 
                 gameObjects.remove(p);
-
-                Debug.Log("Index: " + p + "///  Size:" + gameObjects.size());
 
                 invalidate();
                 return true;

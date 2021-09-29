@@ -1,6 +1,7 @@
 package com.ivan.apples;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +24,7 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
     private Bitmap _bmpSource = null;
     private Matrix _matrix = null;
 
-    private Vector2 _originalScale = new Vector2(0.7f, 0.7f);
+    private Vector2 _originalScale = new Vector2(0.25f, 0.25f);
 
     private Vector2 _firstFingerPosition = null;
     private Vector2 _secondFingerPosition = null;
@@ -33,8 +34,14 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
         _res = res;
         _bmpSource = BitmapFactory.decodeResource(_res, R.drawable.resimg);
 
+        if ((_res.getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE){
+
+            _originalScale = new Vector2(0.7f, 0.7f);
+        }
+
         _matrix = new Matrix();
-        _matrix.setScale(0.7f, 0.7f);
+        _matrix.setScale(_originalScale.getX(), _originalScale.getY());
+
     }
 
 
@@ -48,21 +55,15 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
-
-
         try{
 
             Bitmap bmp = Bitmap.createBitmap(_bmpSource, 0, 0, _bmpSource.getWidth(), _bmpSource.getHeight(), _matrix, true);
-
             canvas.drawBitmap(bmp, 0, 0, _paint);
-
         }
         catch (Exception ex){
 
             Debug.Log(ex.getMessage());
         }
-
     }
 
     public void SetFingers(Vector2 first, Vector2 second){
@@ -70,7 +71,6 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
         _firstFingerPosition = first;
         _secondFingerPosition = second;
 
-        Debug.Log("SET!");
     }
 
     public void Zoom(Vector2 newFirst, Vector2 newSecond){
@@ -81,18 +81,7 @@ public class ZoomImage extends androidx.appcompat.widget.AppCompatImageView {
                     (_secondFingerPosition.subtract(_firstFingerPosition)).magnitude();
 
 
-            Debug.Log("FIRST MAGN: " + (_secondFingerPosition.subtract(_firstFingerPosition)).magnitude());
-            Debug.Log("SECOND MAGN: " + (newSecond.subtract(newFirst)).magnitude());
-            Debug.Log("FACTOR: " + scalingFactor);
-
-
-
-            _matrix.setScale(scalingFactor, scalingFactor);
-
-
-
-            //_firstFingerPosition = newFirst;
-            //_secondFingerPosition = newSecond;
+            _matrix.setScale(_originalScale.getX() * scalingFactor, _originalScale.getY() * scalingFactor);
 
             invalidate();
 
